@@ -1,0 +1,48 @@
+function scr_room_goto(argument0) //gml_Script_scr_room_goto
+{
+	//Save state for last room
+    global.lastroom = global.currentroom
+    global.lastdoor = global.currentdoor
+    ds_list_copy(global.lastsaveroom, global.currentsaveroom)
+    ds_list_copy(global.lastescaperoom, global.currentescaperoom)
+    ds_list_copy(global.lastbaddieroom, global.currentbaddieroom)
+    ds_list_copy(global.lastdebris_list, global.currentdebris_list)
+    ds_list_copy(global.lastcollect_list, global.currentcollect_list)
+    global.lastshroomfollow = global.currentshroomfollow
+    global.lastcheesefollow = global.currentcheesefollow
+    global.lasttomatofollow = global.currentsausagefollow
+    global.lastsausagefollow = global.currentsausagefollow
+    global.lastpineapplefollow = global.currentpineapplefollow
+    global.lastkey_inv = global.currentkey_inv
+    global.lastkeyget = global.currentkeyget
+    global.lastgerome = global.currentgerome
+	
+	//save state for current room
+    global.currentroom = obj_player.targetRoom
+    global.currentdoor = obj_player.targetDoor
+    ds_list_copy(global.currentsaveroom, global.saveroom)
+    ds_list_copy(global.currentescaperoom, global.escaperoom)
+    ds_list_copy(global.currentbaddieroom, global.baddieroom)
+    ds_list_copy(global.currentdebris_list, global.debris_list)
+    ds_list_copy(global.currentcollect_list, global.collect_list)
+    global.currentshroomfollow = global.shroomfollow
+    global.currentcheesefollow = global.cheesefollow
+    global.currenttomatofollow = global.tomatofollow
+    global.currentsausagefollow = global.sausagefollow
+    global.currentpineapplefollow = global.pineapplefollow
+    global.currentkey_inv = global.key_inv
+    global.currentkeyget = global.keyget
+    global.currentgerome = global.gerome
+    global.currentgerome = global.gerome
+	
+	//per room timer
+	global.room_frames_prev = global.room_frames
+    global.room_frames = 0
+	global.room_seconds = 0
+	global.room_minutes = 0
+	
+    room_goto(argument0)
+}
+
+
+

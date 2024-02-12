@@ -1,0 +1,75 @@
+scr_getinput_practice()
+loadorsave = (slot1 || slot2 || slot3 || slot4 || slot5 || slot6 || slot7 || slot8 || slot9 || slot0)
+if slot1
+    slot = 1
+else if slot2
+    slot = 2
+else if slot3
+    slot = 3
+else if slot4
+    slot = 4
+else if slot5
+    slot = 5
+else if slot6
+    slot = 6
+else if slot7
+    slot = 7
+else if slot8
+    slot = 8
+else if slot9
+    slot = 9
+else if slot0
+    slot = 0
+if loadorsave
+{
+    if savestate
+    {
+        filled_states[slot] = 1
+        tas_savestate(slot)
+        create_transformation_tip(("Saved Slot " + string(slot)))
+    }
+    else if filled_states[slot]
+        tas_loadstate(slot)
+}
+if (pause && !global.paused)
+{
+    if (alarm[1] > -1)
+    {
+        global.paused = 0
+        alarm[1] = -1
+    }
+    else
+        global.paused = (!global.paused)
+}
+else if (pause)
+{
+    global.paused = 0
+    alarm[1] = 2
+}
+else if (unpause)
+{
+	global.paused = 0
+}
+
+//Not sure what this does
+for (var i = vk_nokey; i < array_length(global.taskeypress); i++)
+{
+    var a = global.taskeypress[i]
+    if (!is_array(a))
+    {
+    }
+    else
+    {
+        a[0] = ((!a[1]) && keyboard_check(i))
+        if (!global.paused)
+            a[1] = keyboard_check(i)
+    }
+}
+if global.paused
+{
+    with (obj_player)
+    {
+        alarm[5] = -1
+        image_alpha = 1
+    }
+}

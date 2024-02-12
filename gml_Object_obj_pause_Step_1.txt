@@ -1,0 +1,13 @@
+//Update per room timer
+//Add to obj_pause as a new step, EndStep
+if pause
+{
+    var s = (delta_time / 1000000)
+    global.room_seconds += s
+    if (global.room_seconds >= 60)
+    {
+        global.room_seconds = frac(global.room_seconds)
+        global.room_minutes++
+    }
+    global.room_frames += 1
+}

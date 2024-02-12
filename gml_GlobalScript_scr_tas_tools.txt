@@ -1,0 +1,285 @@
+global.taskeypress = []
+function tas_check_pressed(argument0) //gml_Script_tas_check_pressed
+{
+    if (argument0 >= array_length(global.taskeypress) || global.taskeypress[argument0] == 0 || (!instance_exists(obj_tas_tool)))
+        global.taskeypress[argument0] = [keyboard_check_pressed(argument0), keyboard_check(argument0)]
+    return global.taskeypress[argument0][0];
+}
+
+global.paused = 0
+function tas_paused(argument0) //gml_Script_tas_paused
+{
+    if (argument0 == undefined)
+        argument0 = 0
+    if global.paused
+    {
+        if ((!(variable_instance_exists(id, "TAS_PAUSED"))) || TAS_PAUSED == -4)
+            TAS_PAUSED = [friction, gravity, hspeed, vspeed, speed, image_speed]
+        friction = 0
+        gravity = 0
+        hspeed = 0
+        vspeed = 0
+        speed = 0
+        image_speed = 0
+        if argument0
+        {
+            for (var i = 0; i < 12; i++)
+            {
+                if (alarm[i] > 0)
+                    alarm[i]++
+            }
+        }
+        return 1;
+    }
+    else if (variable_instance_exists(id, "TAS_PAUSED") && TAS_PAUSED != -4)
+    {
+        friction = TAS_PAUSED[0]
+        gravity = TAS_PAUSED[1]
+        hspeed = TAS_PAUSED[2]
+        vspeed = TAS_PAUSED[3]
+        speed = TAS_PAUSED[4]
+        image_speed = TAS_PAUSED[5]
+        TAS_PAUSED = -4
+    }
+    return 0;
+}
+
+global.savestates = []
+//argument0 = slottosave 
+//leave as argument0 as UTMT will revert the param name to argument0 but not any references
+function tas_savestate(slottosave) //gml_Script_tas_savestate
+{
+    if (argument0 == undefined)
+        argument0 = 0
+		
+	//Declare empty array for objects and for global variables
+    var objects = []
+    var globals = []
+	
+	var dontsave = []
+	var culled_list = ds_list_create()
+	var dontsaveindex = 0
+	
+	//save cull list
+	//with (obj_cullingsystem)
+    {
+		//ds_list_copy(culled_list, cull_list)
+	}
+	
+	//save state of culled list objects
+	//code is duped from with(all) so make sure to change both
+	//for (var c = 0; c < ds_list_size(culled_list); c++)
+	{
+		//var b = ds_list_find_value(culled_list, c)
+		
+		//with (b.ID)
+		{
+			//create_transformation_tip(("tried to save " + string(id)))
+		
+			//var varnames = variable_instance_get_names(id)
+			//var variables = []
+			
+			//push name value pairs into array variables
+			//for (i = 0; i < array_length(varnames); i++)
+			{
+				//array_push(variables, [varnames[i], variable_instance_get(id, varnames[i])])				
+			}
+			
+			//Push array of info into array objects
+				
+				//var objectinfo = [
+				//id,
+				//object_index,
+				//x,
+				//y,
+				//image_speed,
+				//image_index,
+				//sprite_index,
+				//variables,
+				//[alarm[0], alarm[1], alarm[2], alarm[3], alarm[4], alarm[5], alarm[6], alarm[7], alarm[8], alarm[9], alarm[10], alarm[11]],
+				//image_xscale,
+				//image_yscale,
+				//1
+				//]
+				
+				//array_push(objects, objectinfo)
+				
+				//Don't confuse with "savestate" which is the name of an input variable
+				//this is used in alarm[0] to check whether an object was successfully loaded or not
+				//SAVESTATE = 0
+		}
+		
+	}
+	
+    with (all)
+    {
+		//Don't save state of these two objects
+        if (object_index == obj_tas_tool || object_index == obj_music)
+        {
+        }
+        else
+        {
+			//Get array of an object's variables
+            var varnames = variable_instance_get_names(id)
+            var variables = []
+			
+			//push name value pairs into array variables
+            for (i = 0; i < array_length(varnames); i++)
+			{
+				array_push(variables, [varnames[i], variable_instance_get(id, varnames[i])])				
+			}
+                
+			
+			//Push array of info into array objects
+			//index : Value
+			// 0 : instance id
+			// 1 : object index
+			// 2 : x pos
+			// 3 : y pos
+			// 4 : image_speed
+			// 5 : image_index
+			// 6 : sprite_index
+			// 7 : variables (array)
+			// 8 : alarms (array)
+			// 9 : image_xscale
+			// 10 : image_yscale
+			
+			var objectinfo = [
+			id,
+			object_index,
+			x,
+			y,
+			image_speed,
+			image_index,
+			sprite_index,
+			variables,
+			[alarm[0], alarm[1], alarm[2], alarm[3], alarm[4], alarm[5], alarm[6], alarm[7], alarm[8], alarm[9], alarm[10], alarm[11]],
+			image_xscale,
+			image_yscale,
+			0
+			]
+			
+			//save solid IDs so they aren't duplicated when the objs are loaded
+			if (object_index == obj_onewaybigblock) 
+			{
+				array_push(dontsave, solid_inst)
+			}
+			else if (object_index == obj_monstergate)
+			{
+				array_push(dontsave, solidID)
+			}
+			
+			array_push(objects, objectinfo)
+			
+			//Don't confuse with "savestate" which is the name of an input variable
+			//this is used in alarm[0] to check whether an object was successfully loaded or not
+			SAVESTATE = 0
+			
+        }
+    }
+	
+	//Get global variable names
+    varnames = variable_instance_get_names(global)
+	
+    for (i = 0; i < array_length(varnames); i++)
+    {
+		//Don't save these globals
+        if (varnames[i] == "paused" || varnames[i] == "savestates")
+        {
+        }
+        else
+        {
+			//Get value of global
+            var value = variable_global_get(varnames[i])
+			
+			//The value is a list (and a real number?)
+            if (is_real(value) && ds_exists(value, ds_type_list))
+            {
+                var ds = []
+				
+				//Store the list's values in array ds
+                for (var j = 0; j < ds_list_size(value); j++)
+                    array_push(ds, ds_list_find_value(value, j))
+				
+				//Push array of [list name, list, array of list values, and ds type] in the array globals
+				//ds type used to indicate how it is loaded
+                array_push(globals, [varnames[i], value, ds, ds_type_list])
+            }
+			
+			//Push name, value pair of global variable into array globals
+            else
+                array_push(globals, [varnames[i], value])
+        }
+    }
+	
+	//Save state as array
+	// index : value
+	// 0 : room name
+	// 1 : objects (array)
+	// 2 : global variables (array)
+	// 3 : camera X
+	// 4 : camera Y
+	// 5 : instance IDs that should not be loaded (array)
+	
+	var saveinfo = [
+	room,
+	objects,
+	globals,
+	camera_get_view_x(view_camera[0]),
+	camera_get_view_y(view_camera[0]),
+	dontsave
+	]
+	
+    global.savestates[argument0] = saveinfo
+
+	//return value not used
+    return global.savestates[argument0];
+}
+
+//argument 0 = slottoload
+function tas_loadstate(argument0) //gml_Script_tas_loadstate
+{
+    if (argument0 == undefined)
+        argument0 = 0
+	
+    var save = global.savestates[argument0]
+	
+	//for each (global) variable in save
+    for (j = 0; j < array_length(save[2]); j++)
+    {
+        var glob = save[2][j]
+		
+		//Check length, length <= 2 is set later
+		//glob[3] check may be redundant. Are there vars of length > 2 that aren't a ds_type_list?
+        if (array_length(glob) > 2)
+        {
+            if (glob[3] == ds_type_list)
+            {
+				//clear the list glob[1], then re-add each value of array glob[2] into glob[1]
+			
+                ds_list_clear(glob[1])
+		
+                for (i = 0; i < array_length(glob[2]); i++)
+                    ds_list_add(glob[1], glob[2][i])
+            }
+            else
+                variable_global_set(glob[0], glob[1])
+        }
+    }
+	
+    room_goto(save[0])
+	
+	//Set each global variable in save AFTER entering the saved room
+	//wouldn't this redundantly set ds_type_list variables that were set earlier?
+	//What is the point of doing the lists before entering the room?
+	
+    for (j = 0; j < array_length(save[2]); j++)
+    {
+        glob = save[2][j]
+        variable_global_set(glob[0], glob[1])
+    }
+	
+	//Activate alarm 1
+    with (obj_tas_tool)
+        alarm[0] = 1
+}

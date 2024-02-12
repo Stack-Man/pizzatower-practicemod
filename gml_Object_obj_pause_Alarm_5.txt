@@ -1,0 +1,73 @@
+//Edited for Chef Tasks
+
+var rm = roomtorestart
+scr_pause_stop_sounds()
+global.levelattempts++
+ds_list_clear(global.saveroom)
+ds_list_clear(global.baddieroom)
+ds_list_clear(global.debris_list)
+ds_list_clear(global.collect_list)
+alarm[4] = 1
+obj_music.music = -4
+instance_destroy(obj_fadeout)
+global.levelreset = 0
+scr_playerreset()
+global.levelreset = 1
+obj_player1.targetRoom = rm
+obj_player2.targetRoom = rm
+scr_room_goto(rm)
+var _d = "A"
+if (rm == boss_pizzaface)
+    _d = "B"
+obj_player1.targetDoor = _d
+obj_player1.restartbuffer = 15
+obj_player2.restartbuffer = 15
+if instance_exists(obj_player2)
+    obj_player2.targetDoor = _d
+if (rm == 659 || rm == 515 || rm == 513 || rm == 783 || rm == 514)
+    global.bossintro = 1
+
+//Clear achievements list, except sranks
+with (obj_achievementtracker)
+{
+    for (i = 0; i < array_length(achievements_update); i++)
+    {
+        b = achievements_update[i]
+        with (b)
+        {
+            if (name != "sranks1" && name != "sranks2" && name != "sranks3" && name != "sranks4" && name != "sranks5" && name != "pranks1" && name != "pranks2" && name != "pranks3" && name != "pranks4" && name != "pranks5")
+            {
+                unlocked = 0
+                size = ds_map_size(variables)
+                key = ds_map_find_first(variables)
+                for (j = 0; j < size; j++)
+                {
+                    q = ds_map_find_value(variables, key)
+                    if q.save
+                        q.value = ini_read_real("achievements_variables", key, q.init_value)
+                    key = ds_map_find_next(variables, key)
+                }
+            }
+        }
+    }
+    for (i = 0; i < array_length(achievements_notify); i++)
+    {
+        b = achievements_notify[i]
+        with (b)
+        {
+            if (name != "sranks1" && name != "sranks2" && name != "sranks3" && name != "sranks4" && name != "sranks5" && name != "pranks1" && name != "pranks2" && name != "pranks3" && name != "pranks4" && name != "pranks5")
+            {
+                unlocked = 0
+                size = ds_map_size(variables)
+                key = ds_map_find_first(variables)
+                for (j = 0; j < size; j++)
+                {
+                    q = ds_map_find_value(variables, key)
+                    if q.save
+                        q.value = ini_read_real("achievements_variables", key, q.init_value)
+                    key = ds_map_find_next(variables, key)
+                }
+            }
+        }
+    }
+}

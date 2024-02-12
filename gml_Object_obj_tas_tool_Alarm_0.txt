@@ -1,0 +1,156 @@
+//slot is set during step_0
+var save = global.savestates[slot]
+
+//save index : value
+// 0 : room name
+// 1 : objects (array)
+// 2 : global variables (array)
+// 3 : camera X
+// 4 : camera Y
+// 5 : dont save instance IDs (array)
+
+//for each object in save
+for (var i = 0; i < array_length(save[1]); i++)
+{
+    var obj = save[1][i]
+	
+	//obj index : Value
+	// 0 : instance id
+	// 1 : object index
+	// 2 : x pos
+	// 3 : y pos
+	// 4 : image_speed
+	// 5 : image_index
+	// 6 : sprite_index
+	// 7 : variables (2D array)
+	// 8 : alarms (array) 
+	// 9 : image_xscale
+	// 10 : image_yscale
+	// 11 : was culled
+
+	//check if dontsave contains id
+	var dontload = 0
+	
+	for (var d = 0; d < array_length(save[5]); d++)
+	{
+		if (obj[0] == save[5][d])
+		{
+			dontload = 1
+			d = array_length(save[5])
+		}			
+	}
+
+
+	//not a solid_inst/solidID from onewaybigblock/monstergate
+	if (!dontload)
+	{
+		if (obj[11])
+		{
+			instance_activate_object(obj[0])
+			create_transformation_tip(("tried to activate " + string(obj[0])))
+		}
+			
+	
+		//If the object id in the save doesn't already exist
+		if (!instance_exists(obj[0]))
+			obj[0] = instance_create(obj[2], obj[3], obj[1])		
+		
+		//set the objects variables
+		with (obj[0])
+		{
+			x = obj[2]
+			y = obj[3]
+			
+			image_speed = obj[4]
+			image_index = obj[5]
+			sprite_index = obj[6]
+			
+			image_xscale = obj[9]
+			image_yscale = obj[10]
+			
+			//Don't write vars of followcharacter, they get written during obj_followcharacter_create_0
+			//[j][0] is name and [j][1] is value
+			if (!object_is_ancestor(object_index, obj_followcharacter))
+			{
+				//initialize the objects variables
+				for (var j = 0; j < array_length(obj[7]); j++)
+					//dont reinit pumpkin sound
+					if (object_index == obj_pumpkin && obj[7][j][0] == "snd")
+						destroy_sounds([obj[7][j][1]])
+					else
+						variable_instance_set(id, obj[7][j][0], obj[7][j][1])
+			}
+			
+			//initialize the objects alarms
+			for (j = 0; j <= 11; j++)
+				alarm[j] = obj[8][j]
+				
+			//Set to not destroy
+			SAVESTATE = 1
+			
+		}
+	}
+}
+
+with (all)
+{
+	//Destroy any objects that still have a SAVESTATE value of 0
+	//The room gets loaded, so we need to destroy objects that weren't saved because they were destroyed before saving
+	//important to prevent dupe objects
+    if (object_index != obj_tas_tool && object_index != obj_music)
+    {
+        if ((!(variable_instance_exists(id, "SAVESTATE"))) || variable_instance_get(id, "SAVESTATE") == 0)
+		{	
+			instance_destroy(id, false)
+		}		           
+    }
+}
+
+//recreate the oneway's solid since it gets deleted on load
+with (obj_onewaybigblock)
+{
+	if (image_xscale == 1)
+	{
+		with (instance_create(x, y, obj_solid))
+		{
+			image_yscale = 2
+			other.solid_inst = id
+		}
+	}
+	if (image_xscale == -1)
+	{
+		with (instance_create((x - 32), y, obj_solid))
+		{
+			image_yscale = 2
+			other.solid_inst = id
+		}
+	}
+}
+
+//do the same with the alarm gate
+with (obj_monstergate)
+{
+	solidID = instance_create(x, y, obj_solid)
+	solidID.sprite_index = sprite_index
+	solidID.visible = false
+	solidID.image_speed = 0
+	solidID.image_xscale = image_xscale
+	solidID.image_yscale = image_yscale
+}
+
+//Reset global.spaceblockswitch to prevent obj_spaceblockswitch from overwriting it
+if instance_exists(obj_spaceblockswitch)
+{
+	for (j = 0; j < array_length(save[2]); j++)
+	{
+		glob = save[2][j]
+		if (glob[0] == "spaceblockswitch")
+			variable_global_set(glob[0], glob[1])
+	}
+}
+
+//Set camera position
+camera_set_view_pos(view_camera[0], save[3], save[4])
+
+create_transformation_tip(("Loaded slot " + string(slot)))
+

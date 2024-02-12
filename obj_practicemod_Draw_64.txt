@@ -1,0 +1,137 @@
+if variable_global_exists("smallfont")
+{
+	draw_set_alpha(1)
+	draw_set_color(c_white)
+	draw_set_font(global.smallfont)
+	draw_set_halign(fa_left)
+	draw_set_valign(fa_top)
+
+	//Draw Version
+	var versionstr = concat("SPM V2.1")
+	draw_text(8, 8, versionstr)
+
+	//Draw Stats
+	if (global.showstats > 0)
+	{
+		//Position
+		var statsposX = concat("X:", obj_player.x)
+		var statsposY = concat("      Y:", obj_player.y)
+		
+		//Negative
+		if (obj_player.x < 0)
+			statsposX = concat("X:M", obj_player.x)
+			
+		if (obj_player.y < 0)
+			statsposY = concat("      Y:M", obj_player.y)
+			
+		draw_text(8, 32, statsposX)
+		draw_text(8, 32, statsposY)
+		
+		//Speed
+		var statsspeedX = concat("VX:", obj_player.hsp)
+		var statsspeedY = concat("      VY:", obj_player.vsp)
+		
+		//Negative
+		if (obj_player.hsp < 0)
+			statsposX = concat("VX:M", obj_player.hsp)
+			
+		if (obj_player.vsp < 0)
+			statsposY = concat("      VY:M", obj_player.vsp)
+		
+		draw_text(8, 56, statsspeedX)
+		draw_text(8, 56, statsspeedY)
+		
+		//Input
+		var input_display_width_offset = -30
+		var input_display_height = 25
+		var inputs = [global.key_up, global.key_down, global.key_right, global.key_left, global.key_jump, global.key_slap, global.key_attack, global.key_taunt]
+		var inputsC = [global.key_upC, global.key_downC, global.key_rightC, global.key_leftC, global.key_jumpC, global.key_slapC, global.key_attackC, global.key_tauntC]
+		
+		for (var i = 0; i < array_length(inputs); i++)
+		{
+			if (i == 4)
+			{
+				input_display_height = 70
+				input_display_width_offset = -30
+			}
+			input_display_width_offset += 60
+			if (inputs[i] != -4 && inputsC[i] != -4)
+			{
+				var color = ((keyboard_check(inputs[i]) || gamepad_button_check(obj_inputAssigner.player_input_device[0], inputsC[i])) ? c_white : c_gray)
+				draw_sprite_ext(spr_controlicons, i, (obj_screensizer.actual_width - input_display_width_offset), input_display_height, 1, 1, 0, color, 1)
+			}
+		}
+		
+		input_display_height = 125
+		
+		if (global.key_superjumpC != -4 && gamepad_button_check(obj_inputAssigner.player_input_device[0], global.key_superjumpC))
+			draw_sprite(spr_controlicons, 9, (obj_screensizer.actual_width - 30), input_display_height)
+			
+		if (global.key_groundpoundC != -4 && gamepad_button_check(obj_inputAssigner.player_input_device[0], global.key_groundpoundC))
+			draw_sprite(spr_controlicons, 10, (obj_screensizer.actual_width - 90), input_display_height)
+		
+		//Score
+		if (global.showstats > 1)
+		{
+			var truescore = (global.collect + global.collectN)
+			var collectval = concat("SCORE: ", truescore, " P: ", global.collect, " N: ", global.collectN)
+			var comboval = concat("COMBO: ", global.comboscore)
+			draw_text(8, 80, collectval)
+			draw_text(8, 104, comboval)
+		}
+		
+		//Roomname
+		draw_set_font(global.creditsfont)
+		var roomname = concat(room_get_name(room), " ", obj_player.targetDoor)
+		draw_text(140, 0, roomname)
+	}
+
+	draw_set_valign(fa_bottom)
+	draw_set_font(global.smallfont)
+	
+	//Room Timer
+	seconds = global.room_seconds
+	minutes = global.room_minutes
+	s_str = ""
+	m_str = ""
+	mm = frac(seconds)
+	mm = string(mm)
+	mm = string_copy(mm, 3, 5)
+	while (string_length(mm) < 1)
+		mm += "0"
+	sd = floor(seconds)
+	if (sd < 10)
+		s_str = concat(0, sd)
+	else
+		s_str = string(sd)
+	minutes = floor(minutes)
+	hours = 0
+	while (minutes > 59)
+	{
+		minutes -= 60
+		hours++
+	}
+	if (minutes < 10)
+		m_str = concat(0, minutes)
+	else
+		m_str = string(minutes)
+	if (hours < 10)
+		hours = concat(0, hours)
+	else
+		hours = string(hours)
+	finalstr = concat(hours, ":", m_str, ":", s_str, ".", mm)
+	draw_text(10, (obj_screensizer.actual_height - 32), finalstr)
+
+	//Room Frames
+	var frames = string(global.room_frames_prev)
+	seconds = ((global.room_frames_prev % 3600) / 60)
+	s_str = string_format(seconds, 2, 3)
+	s_str = string_replace(s_str, " ", "0")
+	minutes = floor((global.room_frames_prev / 3600))
+	if (minutes > 0)
+		m_str = (string(minutes) + ":")
+	else
+		m_str = ""
+	finalstr = concat(m_str, s_str, " ", frames)
+	draw_text(10, (obj_screensizer.actual_height - 8), finalstr)
+}

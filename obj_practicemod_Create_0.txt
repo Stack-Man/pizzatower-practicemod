@@ -1,0 +1,43 @@
+global.currentroom = 0
+global.currentdoor = "A"
+global.lastroom = 0
+global.lastdoor = "A"
+global.lastcommand = "noclip"
+
+global.showstats = 0
+global.showcollisions = 0
+global.room_minutes = 0
+global.room_seconds = 0
+global.room_frames_prev = 0
+global.room_frames = 0
+depth = -600
+
+scr_init_input_practice()
+scr_initpracticeinput()
+
+global.currentsaveroom = ds_list_create()
+global.currentescaperoom = ds_list_create()
+global.currentbaddieroom = ds_list_create()
+global.currentdebris_list = ds_list_create()
+global.currentcollect_list = ds_list_create()
+global.currentshroomfollow = 0
+global.currentcheesefollow = 0
+global.currenttomatofollow = 0
+global.currentsausagefollow = 0
+global.currentpineapplefollow = 0
+global.currentkey_inv = 0
+global.currentkeyget = 0
+global.currentgerome = 0
+global.lastsaveroom = ds_list_create()
+global.lastescaperoom = ds_list_create()
+global.lastbaddieroom = ds_list_create()
+global.lastdebris_list = ds_list_create()
+global.lastcollect_list = ds_list_create()
+global.lastshroomfollow = 0
+global.lastcheesefollow = 0
+global.lasttomatofollow = 0
+global.lastsausagefollow = 0
+global.lastpineapplefollow = 0
+global.lastkey_inv = 0
+global.lastkeyget = 0
+global.lastgerome = 0

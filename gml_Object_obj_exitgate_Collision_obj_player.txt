@@ -1,0 +1,101 @@
+//Edited for Chef Tasks
+
+if (image_index == 1 && global.panic == 0 && room != war_13)
+{
+    with (obj_player)
+    {
+        if (state == (95 << 0) && floor(image_index) == (image_number - 2))
+        {
+            fmod_event_one_shot_3d("event:/sfx/pep/groundpound", x, y)
+            GamepadSetVibration(0, 1, 1, 0.9)
+            GamepadSetVibration(1, 1, 1, 0.9)
+            with (obj_player1)
+            {
+                lastroom = room
+                sprite_index = spr_Timesup
+                image_index = 0
+                with (obj_camera)
+                {
+                    shake_mag = 10
+                    shake_mag_acc = (30 / room_speed)
+                }
+            }
+            if (global.coop == 1)
+            {
+                with (obj_player2)
+                {
+                    lastroom = room
+                    sprite_index = spr_Timesup
+                    image_index = 0
+                    with (obj_camera)
+                    {
+                        shake_mag = 10
+                        shake_mag_acc = (30 / room_speed)
+                    }
+                }
+            }
+            other.image_index = 0
+            ds_list_add(global.saveroom, other.id)
+        }
+    }
+}
+if (drop && dropstate != (126 << 0))
+    return;
+with (obj_player)
+{
+    if (grounded && x > (other.x - 160) && x < (other.x + 160) && key_up && (state == (0 << 0) || state == (99 << 0) || state == (103 << 0) || state == (104 << 0) || state == (121 << 0)) && (global.panic == 1 || global.snickchallenge == 1 || room == war_13))
+    {
+        global.noisejetpack = 0
+        global.startgate = 0
+        stop_music()
+        if (global.collect <= 0)
+            global.collect = 10
+        scr_do_rank()
+        
+		//empty achievement list, except sranks
+        with (obj_achievementtracker)
+{
+    for (i = 0; i < array_length(achievements_update); i++)
+    {
+        b = achievements_update[i]
+        with (b)
+        {
+            if (name != "sranks1" && name != "sranks2" && name != "sranks3" && name != "sranks4" && name != "sranks5" && name != "pranks1" && name != "pranks2" && name != "pranks3" && name != "pranks4" && name != "pranks5")
+            {
+                unlocked = 0
+                size = ds_map_size(variables)
+                key = ds_map_find_first(variables)
+                for (j = 0; j < size; j++)
+                {
+                    q = ds_map_find_value(variables, key)
+                    if q.save
+                        q.value = ini_read_real("achievements_variables", key, q.init_value)
+                    key = ds_map_find_next(variables, key)
+                }
+            }
+        }
+    }
+    for (i = 0; i < array_length(achievements_notify); i++)
+    {
+        b = achievements_notify[i]
+        with (b)
+        {
+            if (name != "sranks1" && name != "sranks2" && name != "sranks3" && name != "sranks4" && name != "sranks5" && name != "pranks1" && name != "pranks2" && name != "pranks3" && name != "pranks4" && name != "pranks5")
+            {
+                unlocked = 0
+                size = ds_map_size(variables)
+                key = ds_map_find_first(variables)
+                for (j = 0; j < size; j++)
+                {
+                    q = ds_map_find_value(variables, key)
+                    if q.save
+                        q.value = ini_read_real("achievements_variables", key, q.init_value)
+                    key = ds_map_find_next(variables, key)
+                }
+            }
+        }
+    }
+}
+        
+    }
+}

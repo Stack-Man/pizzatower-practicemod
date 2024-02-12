@@ -1,0 +1,83 @@
+scr_getinput_practice()
+
+if (show_stats)
+{
+	//0 don't display
+	//1 display simple and input
+	//2 display advanced
+	global.showstats++
+	
+	if (global.showstats > 2)
+		global.showstats = 0
+}
+
+if (mach4)
+{
+	obj_player.movespeed = (20 * obj_player.image_xscale)
+}
+
+if (spawn_gerome)
+{
+	global.gerome = 1
+	instance_create(obj_player.x, obj_player.y, obj_geromefollow)
+}
+
+if (spawn_key)
+{
+	global.keyget = 1
+	global.key_inv = 1
+	instance_create(obj_player.x, obj_player.y, obj_keyfollow)
+}
+
+if (spawn_shotgun)
+{
+	instance_create(obj_player.x, obj_player.y, obj_shotgun)
+}
+
+if keyboard_check_pressed(vk_pageup)
+    instance_create(obj_player.x, obj_player.y, obj_characterswitch)
+
+if (spawn_satan)
+{
+	instance_create(obj_player.x, obj_player.y, obj_noisejetpack)
+}
+
+if (reset_level)
+{
+	ds_list_clear(global.saveroom)
+	ds_list_clear(global.escaperoom)
+	ds_list_clear(global.baddieroom)
+	ds_list_clear(global.debris_list)
+	ds_list_clear(global.collect_list)
+	global.shroomfollow = 0
+	global.cheesefollow = 0
+	global.tomatofollow = 0
+	global.sausagefollow = 0
+	global.pineapplefollow = 0
+	global.key_inv = 0
+	global.keyget = 0
+	global.gerome = 0
+	obj_player.targetRoom = global.currentroom
+	obj_player.targetDoor = global.currentdoor
+	scr_room_goto(obj_player.targetRoom)
+}
+
+
+//Fix for not having tas tools currently
+global.paused = 0
+
+
+if (!global.paused && room != Endingroom && room != Creditsroom && room != Johnresurrectionroom && room != rank_room && (!instance_exists(obj_endlevelfade)) && room != hub_loadingscreen && room != Finalintro)
+{
+	var s = (delta_time / 1000000)
+
+    global.room_seconds += s
+	
+    if (global.room_seconds >= 60)
+    {
+        global.room_seconds = frac(global.room_seconds)
+        global.room_minutes++
+    }
+	
+    global.room_frames += 1
+}

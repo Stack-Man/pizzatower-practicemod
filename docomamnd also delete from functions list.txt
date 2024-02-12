@@ -1,0 +1,5 @@
+//Replace call.i DoCommand(argc=1) with the below
+//Then delete DoCommand from functions list
+call.i @@This@@(argc=0)
+push.v builtin.DoCommand
+callv.v 1
