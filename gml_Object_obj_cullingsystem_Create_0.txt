@@ -1,6 +1,0 @@
-object_arr = [obj_baddiecollisionbox, obj_collect, obj_spike, obj_baddiespawner]
-if (!(variable_instance_exists(id, "cull_list")))
-	cull_list = ds_list_create()
-offset = 200
-framesmax = 1
-frames = 2

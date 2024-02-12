@@ -57,58 +57,104 @@ function tas_savestate(slottosave) //gml_Script_tas_savestate
     var globals = []
 	
 	var dontsave = []
-	var culled_list = ds_list_create()
 	var dontsaveindex = 0
 	
-	//save cull list
-	//with (obj_cullingsystem)
-    {
-		//ds_list_copy(culled_list, cull_list)
-	}
+	var culled_list = ds_list_create()
+	var culled_objects = []
 	
-	//save state of culled list objects
-	//code is duped from with(all) so make sure to change both
-	//for (var c = 0; c < ds_list_size(culled_list); c++)
-	{
-		//var b = ds_list_find_value(culled_list, c)
+	//save cull list
+	with (obj_cullingsystem)
+    {
+		ds_list_copy(culled_list, cull_list)
 		
-		//with (b.ID)
+		//for (var i = 0; i < ds_list_size(cull_list); i++)
 		{
-			//create_transformation_tip(("tried to save " + string(id)))
-		
-			//var varnames = variable_instance_get_names(id)
-			//var variables = []
+			//var b = ds_list_find_value(cull_list, i)
 			
-			//push name value pairs into array variables
-			//for (i = 0; i < array_length(varnames); i++)
+			//using with(instance_id) is not working?
+			//with (b.ID)
 			{
-				//array_push(variables, [varnames[i], variable_instance_get(id, varnames[i])])				
-			}
+				//var culled_obj = b.ID;
 			
-			//Push array of info into array objects
+				//START GET CULLED OBJECT INFO
+			
+				//Get array of an object's variables
+				//var varnames = variable_instance_get_names(culled_obj.id)
+				//var variables = []
+				
+				//push name value pairs into array variables
+				//for (i = 0; i < array_length(varnames); i++)
+				{
+					//array_push(variables, [varnames[i], variable_instance_get(culled_obj.id, varnames[i])])				
+				}
 				
 				//var objectinfo = [
-				//id,
-				//object_index,
-				//x,
-				//y,
-				//image_speed,
-				//image_index,
-				//sprite_index,
+				//culled_obj.id,
+				//culled_obj.object_index,
+				//culled_obj.x,
+				//culled_obj.y,
+				//culled_obj.image_speed,
+				//culled_obj.image_index,
+				//culled_obj.sprite_index,
 				//variables,
-				//[alarm[0], alarm[1], alarm[2], alarm[3], alarm[4], alarm[5], alarm[6], alarm[7], alarm[8], alarm[9], alarm[10], alarm[11]],
-				//image_xscale,
-				//image_yscale,
-				//1
+				//[culled_obj.alarm[0], culled_obj.alarm[1], culled_obj.alarm[2], culled_obj.alarm[3], 
+				//culled_obj.alarm[4], culled_obj.alarm[5], culled_obj.alarm[6], culled_obj.alarm[7], 
+				//culled_obj.alarm[8], culled_obj.alarm[9], culled_obj.alarm[10], culled_obj.alarm[11]],
+				//culled_obj.image_xscale,
+				//culled_obj.image_yscale
 				//]
 				
-				//array_push(objects, objectinfo)
-				
-				//Don't confuse with "savestate" which is the name of an input variable
-				//this is used in alarm[0] to check whether an object was successfully loaded or not
+				//array_push(culled_objects, objectinfo)
+			
 				//SAVESTATE = 0
+				
+				//END GETTING CULLED OBJECT INFO
+			}
+			
+			//switch b.object_index
+			{
+				//case obj_baddiecollisionbox:
+					//with (b.baddieID)
+					{
+						//var culled_baddie = b.baddieID;
+					
+						//START GET CULLED OBJECT INFO
+			
+						//Get array of an object's variables
+						//var b_varnames = variable_instance_get_names(culled_baddie.id)
+						//var b_variables = []
+						
+						//push name value pairs into array variables
+						//for (i = 0; i < array_length(b_varnames); i++)
+						{
+							//array_push(b_variables, [b_varnames[i], variable_instance_get(culled_baddie.id, b_varnames[i])])				
+						}
+						
+						//var b_objectinfo = [
+						//culled_baddie.id,
+						//culled_baddie.object_index,
+						//culled_baddie.x,
+						//culled_baddie.y,
+						//culled_baddie.image_speed,
+						//culled_baddie.image_index,
+						//culled_baddie.sprite_index,
+						//b_variables,
+						//[culled_baddie.alarm[0], culled_baddie.alarm[1], culled_baddie.alarm[2], culled_baddie.alarm[3], culled_baddie.alarm[4], 
+						//culled_baddie.alarm[5], culled_baddie.alarm[6], culled_baddie.alarm[7], culled_baddie.alarm[8], 
+						//culled_baddie.alarm[9], culled_baddie.alarm[10], culled_baddie.alarm[11]],
+						//culled_baddie.image_xscale,
+						//culled_baddie.image_yscale
+						//]
+						
+						//array_push(culled_objects, b_objectinfo)
+					
+						//SAVESTATE = 0
+						
+						//END GETTING CULLED OBJECT INFO
+					}
+					//break
+			}
 		}
-		
 	}
 	
     with (all)
@@ -128,8 +174,7 @@ function tas_savestate(slottosave) //gml_Script_tas_savestate
 			{
 				array_push(variables, [varnames[i], variable_instance_get(id, varnames[i])])				
 			}
-                
-			
+                		
 			//Push array of info into array objects
 			//index : Value
 			// 0 : instance id
@@ -155,8 +200,7 @@ function tas_savestate(slottosave) //gml_Script_tas_savestate
 			variables,
 			[alarm[0], alarm[1], alarm[2], alarm[3], alarm[4], alarm[5], alarm[6], alarm[7], alarm[8], alarm[9], alarm[10], alarm[11]],
 			image_xscale,
-			image_yscale,
-			0
+			image_yscale
 			]
 			
 			//save solid IDs so they aren't duplicated when the objs are loaded
@@ -220,6 +264,8 @@ function tas_savestate(slottosave) //gml_Script_tas_savestate
 	// 3 : camera X
 	// 4 : camera Y
 	// 5 : instance IDs that should not be loaded (array)
+	// 6 : culled_list IDs
+	// 7 : culled objects (array)
 	
 	var saveinfo = [
 	room,
@@ -227,7 +273,9 @@ function tas_savestate(slottosave) //gml_Script_tas_savestate
 	globals,
 	camera_get_view_x(view_camera[0]),
 	camera_get_view_y(view_camera[0]),
-	dontsave
+	dontsave,
+	culled_list,
+	culled_objects
 	]
 	
     global.savestates[argument0] = saveinfo
@@ -241,6 +289,8 @@ function tas_loadstate(argument0) //gml_Script_tas_loadstate
 {
     if (argument0 == undefined)
         argument0 = 0
+	
+	global.loadingstate = 1
 	
     var save = global.savestates[argument0]
 	
@@ -279,7 +329,7 @@ function tas_loadstate(argument0) //gml_Script_tas_loadstate
         variable_global_set(glob[0], glob[1])
     }
 	
-	//Activate alarm 1
+	//Activate alarm 0
     with (obj_tas_tool)
         alarm[0] = 1
 }

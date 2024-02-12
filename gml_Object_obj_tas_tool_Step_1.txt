@@ -31,6 +31,8 @@ if loadorsave
     else if filled_states[slot]
         tas_loadstate(slot)
 }
+
+//game's pause changed after multibinds, this no longer functions
 if (pause && !global.paused)
 {
     if (alarm[1] > -1)
@@ -52,6 +54,7 @@ else if (unpause)
 }
 
 //Not sure what this does
+//might be for reading input during frame advance
 for (var i = vk_nokey; i < array_length(global.taskeypress); i++)
 {
     var a = global.taskeypress[i]

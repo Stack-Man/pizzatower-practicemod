@@ -64,7 +64,7 @@ if (reset_level)
 
 
 //Fix for not having tas tools currently
-global.paused = 0
+//global.paused = 0
 
 
 if (!global.paused && room != Endingroom && room != Creditsroom && room != Johnresurrectionroom && room != rank_room && (!instance_exists(obj_endlevelfade)) && room != hub_loadingscreen && room != Finalintro)

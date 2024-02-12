@@ -26,7 +26,6 @@ for (var i = 0; i < array_length(save[1]); i++)
 	// 8 : alarms (array) 
 	// 9 : image_xscale
 	// 10 : image_yscale
-	// 11 : was culled
 
 	//check if dontsave contains id
 	var dontload = 0
@@ -44,12 +43,6 @@ for (var i = 0; i < array_length(save[1]); i++)
 	//not a solid_inst/solidID from onewaybigblock/monstergate
 	if (!dontload)
 	{
-		if (obj[11])
-		{
-			instance_activate_object(obj[0])
-			create_transformation_tip(("tried to activate " + string(obj[0])))
-		}
-			
 	
 		//If the object id in the save doesn't already exist
 		if (!instance_exists(obj[0]))
@@ -75,8 +68,20 @@ for (var i = 0; i < array_length(save[1]); i++)
 				//initialize the objects variables
 				for (var j = 0; j < array_length(obj[7]); j++)
 					//dont reinit pumpkin sound
-					if (object_index == obj_pumpkin && obj[7][j][0] == "snd")
-						destroy_sounds([obj[7][j][1]])
+					if ((object_index == obj_pumpkin || object_index == obj_crosspriest_cross) && obj[7][j][0] == "snd")
+					{
+						
+						if (object_index == obj_pumpkin)
+							destroy_sounds([obj[7][j][1]])
+						
+						//if (object_index == obj_crosspriest_cross)
+						{
+							//variable_instance_set(id, obj[7][j][0], fmod_event_create_instance("event:/sfx/pep/cross"))
+							//fmod_event_instance_play(variable_instance_get(id, obj[7][j][0]))
+						}
+
+					}
+						
 					else
 						variable_instance_set(id, obj[7][j][0], obj[7][j][1])
 			}
@@ -91,6 +96,80 @@ for (var i = 0; i < array_length(save[1]); i++)
 		}
 	}
 }
+
+//reactivate culled objs
+//Does not properly remember states of objs, only ends up resetting them to their original positions
+//would be an issue if a player loads object > changes its state (movement?) > unloads objects > saves state > loads said state > loads object again
+//only enemies have a noticeable issue doing this?
+with (obj_cullingsystem)
+{
+	ds_list_copy(cull_list, save[6])
+	
+	//var cx = camera_get_view_x(view_camera[0])
+    //var cy = camera_get_view_y(view_camera[0])
+    //var cw = camera_get_view_width(view_camera[0])
+    //var ch = camera_get_view_height(view_camera[0])
+	
+	//reactivate culled objects
+	for (var i = 0; i < ds_list_size(cull_list); i++)
+    {
+        var b = ds_list_find_value(cull_list, i)
+        //if rectangle_in_rectangle(b.bbox_left, b.bbox_top, b.bbox_right, b.bbox_bottom, (cx - offset), (cy - offset), ((cx + cw) + offset), ((cy + ch) + offset))
+        {
+            instance_activate_object(b.ID)
+            switch b.object_index
+            {
+                case obj_baddiecollisionbox:
+                    instance_activate_object(b.baddieID)
+					variable_instance_set(b.baddieID, "SAVESTATE", 1)
+                    break
+            }
+		
+            ds_list_delete(cull_list, i--)
+			
+			variable_instance_set(b.ID, "SAVESTATE", 1)
+        }
+    }
+	
+	//Load object info for culled objects
+
+	//There's nothing in the array for some reason
+	//for (var i = 0; i < array_length(save[7]); i++)
+	{
+		//var obj = save[7][i]
+		
+		//If the object id in the save doesn't already exist
+		//if (!instance_exists(obj[0]))
+			//obj[0] = instance_create(obj[2], obj[3], obj[1])		
+		
+		//set the objects variables
+		//with (obj[0])
+		//{
+			//obj[0].x = obj[2]
+			//obj[0].y = obj[3]
+			
+			//obj[0].image_speed = obj[4]
+			//obj[0].image_index = obj[5]
+			//obj[0].sprite_index = obj[6]
+			
+			//obj[0].image_xscale = obj[9]
+			//obj[0].image_yscale = obj[10]
+			
+			//[j][0] is name and [j][1] is value
+			//for (var j = 0; j < array_length(obj[7]); j++)
+				//variable_instance_set(obj[0].id, obj[7][j][0], obj[7][j][1])
+			
+			//initialize the objects alarms
+			//for (j = 0; j <= 11; j++)
+				//obj[0].alarm[j] = obj[8][j]
+				
+			//Set to not destroy
+			//obj[0].SAVESTATE = 1
+			
+		//}
+	}
+}
+
 
 with (all)
 {
@@ -149,8 +228,19 @@ if instance_exists(obj_spaceblockswitch)
 	}
 }
 
+//with (obj_racestart)
+{
+	//var pos = ds_list_find_index(global.saveroom, id)
+
+	//if (pos != -1)
+	{
+		//ds_list_delete(global.saveroom, pos)
+	}
+}
+
 //Set camera position
 camera_set_view_pos(view_camera[0], save[3], save[4])
 
 create_transformation_tip(("Loaded slot " + string(slot)))
 
+global.loadingstate = 0

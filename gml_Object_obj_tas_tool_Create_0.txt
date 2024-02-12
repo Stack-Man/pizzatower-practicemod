@@ -4,3 +4,4 @@ filled_states = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 global.taskeypress = []
 global.paused = 0
 global.savestates = []
+global.loadingstate = 0
