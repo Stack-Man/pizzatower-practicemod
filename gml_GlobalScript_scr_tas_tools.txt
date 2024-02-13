@@ -317,6 +317,17 @@ function tas_loadstate(argument0) //gml_Script_tas_loadstate
         }
     }
 	
+	//Prevent sound from leaking into save state it does not belong in
+	with (obj_crosspriest_cross)
+	{
+		destroy_sounds([snd])
+	}
+	
+	with (obj_pumpkin)
+	{
+		destroy_sounds([snd])
+	}
+	
     room_goto(save[0])
 	
 	//Set each global variable in save AFTER entering the saved room

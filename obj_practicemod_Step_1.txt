@@ -1,5 +1,23 @@
 scr_getinput_practice()
 
+//using global.current_taunt in scr_dotaunt
+if change_taunt
+{
+	global.current_taunt += 1
+	if (global.current_taunt >= 12)
+		global.current_taunt = 0
+	
+	if (global.current_taunt >= 11)
+	{
+		create_transformation_tip("Random Taunts")
+	}
+	else
+	{
+		create_transformation_tip(concat("Current Taunt: ", string(global.current_taunt)))
+	}
+	
+}
+
 if (show_stats)
 {
 	//0 don't display
@@ -42,34 +60,12 @@ if (spawn_satan)
 	instance_create(obj_player.x, obj_player.y, obj_noisejetpack)
 }
 
-if (reset_level)
-{
-	ds_list_clear(global.saveroom)
-	ds_list_clear(global.escaperoom)
-	ds_list_clear(global.baddieroom)
-	ds_list_clear(global.debris_list)
-	ds_list_clear(global.collect_list)
-	global.shroomfollow = 0
-	global.cheesefollow = 0
-	global.tomatofollow = 0
-	global.sausagefollow = 0
-	global.pineapplefollow = 0
-	global.key_inv = 0
-	global.keyget = 0
-	global.gerome = 0
-	obj_player.targetRoom = global.currentroom
-	obj_player.targetDoor = global.currentdoor
-	scr_room_goto(obj_player.targetRoom)
-}
-
-
 //Fix for not having tas tools currently
 //global.paused = 0
 
-
 if (!global.paused && room != Endingroom && room != Creditsroom && room != Johnresurrectionroom && room != rank_room && (!instance_exists(obj_endlevelfade)) && room != hub_loadingscreen && room != Finalintro)
 {
-	var s = (delta_time / 1000000)
+	var s = 0.016666666666666666
 
     global.room_seconds += s
 	

@@ -1,6 +1,8 @@
 //set values for pressed buttons on object
 function scr_init_input_practice() //gml_Script_scr_init_input_practice
 {
+	change_taunt = 0
+	
     reload_room = 0
     show_stats = 0
     last_room = 0
@@ -12,7 +14,6 @@ function scr_init_input_practice() //gml_Script_scr_init_input_practice
     show_collisions = 0
     spawn_shotgun = 0
     spawn_satan = 0
-    reset_level = 0
     slot1 = 0
     slot2 = 0
     slot3 = 0
@@ -36,6 +37,10 @@ function scr_getinput_practice() //gml_Script_scr_getinput_practice
     {
         if ((!instance_exists(obj_debugcontroller)) || (!obj_debugcontroller.active))
         {
+			change_taunt = keyboard_check_pressed(global.change_taunt)
+			
+			//Check for pause spam directly in scr_getinput
+			
             reload_room = keyboard_check_pressed(global.reload_room)
             show_stats = keyboard_check_pressed(global.show_stats)
             last_room = keyboard_check_pressed(global.last_room)
@@ -46,7 +51,6 @@ function scr_getinput_practice() //gml_Script_scr_getinput_practice
             show_collisions = keyboard_check_pressed(global.show_collisions)
             spawn_shotgun = keyboard_check_pressed(global.spawn_shotgun)
             spawn_satan = keyboard_check_pressed(global.spawn_satan)
-            reset_level = keyboard_check_pressed(global.reset_level)
             slot1 = keyboard_check_pressed(global.slot1)
             slot2 = keyboard_check_pressed(global.slot2)
             slot3 = keyboard_check_pressed(global.slot3)
@@ -74,9 +78,12 @@ function scr_initpracticeinput(argument0) //gml_Script_scr_initpracticeinput
         argument0 = 1
     if argument0
         ini_open("practicemod.ini")
-    global.reload_room = ini_read_string("DebugKeys", "reloadroom", 112)
+	global.reload_room = ini_read_string("DebugKeys", "reloadroom", 112)
+	global.last_room = ini_read_string("DebugKeys", "lastroom", 114)
+	global.change_taunt = ini_read_string("DebugKeys", "changetaunt", 123)
+	global.pause_spam = ini_read_string("DebugKeys", "pausespam", 86)
+	
     global.show_stats = ini_read_string("DebugKeys", "showstats", 113)
-    global.last_room = ini_read_string("DebugKeys", "lastroom", 114)
     global.noclip = ini_read_string("DebugKeys", "noclip", 115)
     global.debug = ini_read_string("DebugKeys", "debug", 116)
     global.last_command = ini_read_string("DebugKeys", "lastcommand", 117)
@@ -85,7 +92,6 @@ function scr_initpracticeinput(argument0) //gml_Script_scr_initpracticeinput
     global.show_collisions = ini_read_string("DebugKeys", "showcollision", 120)
     global.spawn_shotgun = ini_read_string("DebugKeys", "giveshotgun", 121)
     global.spawn_satan = ini_read_string("DebugKeys", "givesatan", 122)
-    global.reset_level = ini_read_string("DebugKeys", "resetlevel", 123)
     global.slot1 = ini_read_string("DebugKeys", "slot1", 49)
     global.slot2 = ini_read_string("DebugKeys", "slot2", 50)
     global.slot3 = ini_read_string("DebugKeys", "slot3", 51)

@@ -1,5 +1,9 @@
-//Replace call.i DoCommand(argc=1) with the below
-//Then delete DoCommand from functions list
+//Change self.DoCommand(arg) to just DoCommand(arg)
+
+//Replace call.i DoCommand(argc=1) in assembly code with the below
+//Yes, one lines becomes three
 call.i @@This@@(argc=0)
 push.v builtin.DoCommand
 callv.v 1
+
+//Then delete DoCommand from functions list

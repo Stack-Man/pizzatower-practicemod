@@ -1,4 +1,4 @@
-//slot is set during step_0
+//slot is set during step_1
 var save = global.savestates[slot]
 
 //save index : value

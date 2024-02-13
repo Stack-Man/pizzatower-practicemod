@@ -3,54 +3,6 @@ if DEBUG
 	scr_init_input_practice()
 	scr_getinput_practice()
 	
-	if (reload_room)
-    {
-        ds_list_copy(global.saveroom, global.currentsaveroom)
-        ds_list_copy(global.escaperoom, global.currentescaperoom)
-        ds_list_copy(global.baddieroom, global.currentbaddieroom)
-        ds_list_copy(global.debris_list, global.currentdebris_list)
-        ds_list_copy(global.collect_list, global.currentcollect_list)
-        global.shroomfollow = global.currentshroomfollow
-        global.cheesefollow = global.currentcheesefollow
-        global.tomatofollow = global.currenttomatofollow
-        global.sausagefollow = global.currentsausagefollow
-        global.pineapplefollow = global.currentpineapplefollow
-        global.key_inv = global.currentkey_inv
-        global.keyget = global.currentkeyget
-        global.gerome = global.currentgerome
-        obj_player.targetRoom = global.currentroom
-        obj_player.targetDoor = global.currentdoor
-        if (global.gerome && (!instance_exists(obj_geromefollow)))
-            instance_create(obj_player.x, obj_player.y, obj_geromefollow)
-        if (global.keyget && global.key_inv && (!instance_exists(obj_keyfollow)))
-            instance_create(obj_player.x, obj_player.y, obj_keyfollow)
-        scr_room_goto(obj_player.targetRoom)
-    }
-	
-    if (last_room)
-    {
-        ds_list_copy(global.saveroom, global.lastsaveroom)
-        ds_list_copy(global.escaperoom, global.lastescaperoom)
-        ds_list_copy(global.baddieroom, global.lastbaddieroom)
-        ds_list_copy(global.debris_list, global.lastdebris_list)
-        ds_list_copy(global.collect_list, global.lastcollect_list)
-        global.shroomfollow = global.lastshroomfollow
-        global.cheesefollow = global.lastcheesefollow
-        global.tomatofollow = global.lasttomatofollow
-        global.sausagefollow = global.lastsausagefollow
-        global.pineapplefollow = global.lastpineapplefollow
-        global.key_inv = global.lastkey_inv
-        global.keyget = global.lastkeyget
-        global.gerome = global.lastgerome
-        obj_player.targetRoom = global.lastroom
-        obj_player.targetDoor = global.lastdoor
-        if (global.gerome && (!instance_exists(obj_geromefollow)))
-            instance_create(obj_player.x, obj_player.y, obj_geromefollow)
-        if (global.keyget && global.key_inv && (!instance_exists(obj_keyfollow)))
-            instance_create(obj_player.x, obj_player.y, obj_keyfollow)
-        scr_room_goto(obj_player.targetRoom)
-    }
-	
 	if (noclip)
 	{
 		self.DoCommand("noclip")

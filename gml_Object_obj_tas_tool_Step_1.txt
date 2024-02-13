@@ -31,6 +31,24 @@ if loadorsave
     else if filled_states[slot]
         tas_loadstate(slot)
 }
+else
+{
+	//load auto savestate for current room or last room
+	if (reload_room)
+	{
+		slot = 10
+		if filled_states[slot]
+			tas_loadstate(slot)
+	}
+	else if (last_room)
+	{
+		slot = 11
+		if filled_states[slot]
+			tas_loadstate(slot)
+	}
+}
+
+
 
 //game's pause changed after multibinds, this no longer functions
 if (pause && !global.paused)

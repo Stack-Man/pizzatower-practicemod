@@ -1,7 +1,8 @@
 slot = 0
 scr_init_input_practice()
-filled_states = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+filled_states = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 global.taskeypress = []
 global.paused = 0
 global.savestates = []
 global.loadingstate = 0
+currentroom = 0
