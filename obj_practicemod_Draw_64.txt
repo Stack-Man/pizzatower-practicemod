@@ -45,7 +45,7 @@ if variable_global_exists("smallfont")
 		draw_set_valign(fa_top)
 
 		//Draw Version
-		var versionstr = "SPM V2.2"
+		var versionstr = "SPM V2.3 "
 		draw_text(8, 8, versionstr)
 
 		//Draw Stats
@@ -118,9 +118,9 @@ if variable_global_exists("smallfont")
 				draw_text(8, 104, comboval)
 			}
 		
-			//Roomname
+			//Roomname and current sprite
 			draw_set_font(global.creditsfont)
-			var roomname = concat(room_get_name(room), " ", obj_player.targetDoor)
+			var roomname = concat(room_get_name(room), " ", obj_player.targetDoor, " ", sprite_get_name(obj_player.sprite_index))
 			draw_text(140, 0, roomname)
 		}
 	}
@@ -129,8 +129,8 @@ if variable_global_exists("smallfont")
     {
         draw_set_halign(fa_left)
         draw_set_valign(fa_top)
-        versionstr = "SPM V2.2 BY STACK MAN & SUNGLASSES"
-        draw_text(8, 8, versionstr)
+        var cred = "SPM V2.3 BY STACK MAN & SUNGLASSES & JOLLY"
+        draw_text(8, 8, cred)
     }
 	draw_set_valign(fa_bottom)
 	draw_set_font(global.smallfont)
@@ -167,11 +167,34 @@ if variable_global_exists("smallfont")
 		hours = string(hours)
 	finalstr = concat(hours, ":", m_str, ":", s_str, ".", mm)
 	
+	//set bonk timer
+	if instance_exists(obj_player)
+	{	
+		var spritename = obj_player.sprite_index
+	
+		if (spritename != lastspritename)
+		{
+			lastspritename = spritename
+			
+			if (spritename == spr_player_wallsplat || spritename == spr_player_rockethitwall || spritename == spr_player_mach3hitwall
+			|| spritename == spr_knightpep_bump || spritename == spr_player_ratmountbump || spritename == spr_lonegustavo_bump
+			|| spritename == spr_player_suplexbump)
+			{
+				room_time_atbonk = finalstr
+			}
+		}
+	}
+	
 	//frozen room timer
+	//and bonk timer
 	if instance_exists(obj_player)
         room_time_paused = finalstr
     else
-        draw_text(150, (obj_screensizer.actual_height - 32), room_time_paused)									   
+	{
+		draw_text(150, (obj_screensizer.actual_height - 32),  concat("UNPAUSED ", room_time_paused))	
+		draw_text(150, (obj_screensizer.actual_height - 8), concat("BONK     ", room_time_atbonk))
+	}
+        								   
 	draw_text(10, (obj_screensizer.actual_height - 32), finalstr)
 
 	//Room Frames

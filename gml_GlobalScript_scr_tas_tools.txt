@@ -266,6 +266,18 @@ function tas_savestate(slottosave) //gml_Script_tas_savestate
 	// 5 : instance IDs that should not be loaded (array)
 	// 6 : culled_list IDs
 	// 7 : culled objects (array)
+	// 8 : current room save state
+	// 9 : last room save state
+
+	//Remove chain of savestates from saved save states
+	var current = global.savestates[10]
+	var last = global.savestates[11]
+	
+	if (argument0 >= 10)
+	{
+		current = 0
+		last = 0
+	}
 	
 	var saveinfo = [
 	room,
@@ -275,7 +287,9 @@ function tas_savestate(slottosave) //gml_Script_tas_savestate
 	camera_get_view_y(view_camera[0]),
 	dontsave,
 	culled_list,
-	culled_objects
+	culled_objects,
+	current,
+	last
 	]
 	
     global.savestates[argument0] = saveinfo
@@ -313,7 +327,7 @@ function tas_loadstate(argument0) //gml_Script_tas_loadstate
                     ds_list_add(glob[1], glob[2][i])
             }
             else
-                variable_global_set(glob[0], glob[1])
+				variable_global_set(glob[0], glob[1])
         }
     }
 	
@@ -328,6 +342,13 @@ function tas_loadstate(argument0) //gml_Script_tas_loadstate
 		destroy_sounds([snd])
 	}
 	
+	with (obj_instanttemp)
+	{
+		//destroy sound if it is active
+		if (sprite_index == spr_heater2)
+			destroy_sounds([snd])
+	}
+	
     room_goto(save[0])
 	
 	//Set each global variable in save AFTER entering the saved room
@@ -337,8 +358,27 @@ function tas_loadstate(argument0) //gml_Script_tas_loadstate
     for (j = 0; j < array_length(save[2]); j++)
     {
         glob = save[2][j]
-        variable_global_set(glob[0], glob[1])
+		
+		//Don't overwrite certain global stats
+		if (glob[0] != "showstats" && glob[0] != "showcollisions" && glob[0] != "current_taunt")
+			variable_global_set(glob[0], glob[1])
     }
+	
+	//keep track of which states should be loaded as the current and last room
+	
+	//If we load any save state but current and last
+	if (argument0 < 10)
+	{
+		//set the current (10) and last (11) states to be the ones stored in the loaded state
+		//The stored states should lack stored states themselves
+		global.savestates[10] = save[8]
+		global.savestates[11] = save[9]
+	}
+	
+	//if we load current, leave current and last alone
+	//if we load last also dont do nothing!
+	
+	//When loading "current" state, leave "current" and "last" as is.
 	
 	//Activate alarm 0
     with (obj_tas_tool)

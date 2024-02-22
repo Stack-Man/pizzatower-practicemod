@@ -1,5 +1,7 @@
 global.lastcommand = "noclip"
 
+lastspritename = ""
+
 global.current_taunt = 10
 
 global.showstats = 0
@@ -11,6 +13,7 @@ global.room_frames = 0
 depth = -600
 
 room_time_paused = ""
+room_time_atbonk = ""
 
 //sets local input variables for practice mod
 scr_init_input_practice()
