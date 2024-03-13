@@ -45,7 +45,7 @@ if variable_global_exists("smallfont")
 		draw_set_valign(fa_top)
 
 		//Draw Version
-		var versionstr = "SPM V2.3 "
+		var versionstr = "SPM V3.0 "
 		draw_text(8, 8, versionstr)
 
 		//Draw Stats
@@ -129,7 +129,7 @@ if variable_global_exists("smallfont")
     {
         draw_set_halign(fa_left)
         draw_set_valign(fa_top)
-        var cred = "SPM V2.3 BY STACK MAN & SUNGLASSES & JOLLY"
+        var cred = "SPM V3.0 BY STACK MAN & SUNGLASSES & JOLLY"
         draw_text(8, 8, cred)
     }
 	draw_set_valign(fa_bottom)
@@ -178,7 +178,8 @@ if variable_global_exists("smallfont")
 			
 			if (spritename == spr_player_wallsplat || spritename == spr_player_rockethitwall || spritename == spr_player_mach3hitwall
 			|| spritename == spr_knightpep_bump || spritename == spr_player_ratmountbump || spritename == spr_lonegustavo_bump
-			|| spritename == spr_player_suplexbump)
+			|| spritename == spr_player_suplexbump || spritename == spr_player_superjumpland || spritename == spr_player_bump
+			|| spritename == spr_playerN_mach3hitwall)
 			{
 				room_time_atbonk = finalstr
 			}
@@ -191,8 +192,8 @@ if variable_global_exists("smallfont")
         room_time_paused = finalstr
     else
 	{
-		draw_text(150, (obj_screensizer.actual_height - 32),  concat("UNPAUSED ", room_time_paused))	
-		draw_text(150, (obj_screensizer.actual_height - 8), concat("BONK     ", room_time_atbonk))
+		draw_text(150, (obj_screensizer.actual_height - 32),  concat("PAUSE ", room_time_paused))	
+		draw_text(150, (obj_screensizer.actual_height - 8), concat("BONK  ", room_time_atbonk))
 	}
         								   
 	draw_text(10, (obj_screensizer.actual_height - 32), finalstr)

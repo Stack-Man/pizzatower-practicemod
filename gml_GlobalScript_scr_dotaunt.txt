@@ -44,6 +44,7 @@ function scr_dotaunt() //gml_Script_scr_dotaunt
                 taunttimer = 20
                 sprite_index = spr_taunt
 				
+				//Add taunt choosing
 				if (global.current_taunt >= 11)
 					image_index = random_range(0, 11)
 				else

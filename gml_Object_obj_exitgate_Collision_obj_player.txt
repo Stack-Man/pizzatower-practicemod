@@ -43,7 +43,7 @@ if (drop && dropstate != (126 << 0))
     return;
 with (obj_player)
 {
-    if (grounded && x > (other.x - 160) && x < (other.x + 160) && key_up && (state == (0 << 0) || state == (99 << 0) || state == (103 << 0) || state == (104 << 0) || state == (121 << 0)) && (global.panic == 1 || global.snickchallenge == 1 || room == war_13))
+    if (grounded && x > (other.x - 160) && x < (other.x + 160) && key_up && (state == states.normal || state == states.Sjumpprep || state == states.mach1 || state == states.mach2 || state == states.mach3) && (global.panic == 1 || global.snickchallenge == 1 || room == war_13 || other.random_secret))
     {
         global.noisejetpack = 0
         global.startgate = 0

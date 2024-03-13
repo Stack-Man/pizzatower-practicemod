@@ -1,2 +1,8 @@
 obj_tas_tool
+	persistent
+	beginStep
+
 obj_practice_mod
+	persistent
+	beginStep
+	drawGUI

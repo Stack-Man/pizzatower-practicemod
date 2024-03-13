@@ -24,7 +24,7 @@ obj_player1.restartbuffer = 15
 obj_player2.restartbuffer = 15
 if instance_exists(obj_player2)
     obj_player2.targetDoor = _d
-if (rm == 659 || rm == 515 || rm == 513 || rm == 783 || rm == 514)
+if (rm == 656 || rm == 512 || rm == 510 || rm == 779 || rm == 511)
     global.bossintro = 1
 
 //Clear achievements list, except sranks

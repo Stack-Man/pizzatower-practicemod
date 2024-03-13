@@ -1,3 +1,5 @@
+//modified scr_pause_deactivate_objects so it does not pause practice mod
+
 function scr_pauseicon_draw(argument0, argument1, argument2) //gml_Script_scr_pauseicon_draw
 {
     var icon = pause_icons[argument0]
@@ -81,7 +83,7 @@ function scr_pause_activate_objects(argument0) //gml_Script_scr_pause_activate_o
 {
     if (argument0 == undefined)
         argument0 = 1
-    for (i = 0; i < ds_list_size(instance_list); i++)
+    for (var i = 0; i < ds_list_size(instance_list); i++)
         instance_activate_object(ds_list_find_value(instance_list, i))
     if argument0
     {
@@ -103,14 +105,14 @@ function scr_pause_deactivate_objects(argument0) //gml_Script_scr_pause_deactiva
     if argument0
         fmod_event_instance_set_paused_all(1)
     ds_list_clear(instance_list)
-    for (i = 0; i < instance_count; i++)
+    for (var i = 0; i < instance_count; i++)
     {
         var obj = instance_find(all, i)
         if (instance_exists(obj) && obj.object_index != obj_pause && obj.object_index != obj_inputAssigner && obj.object_index != obj_screensizer)
             ds_list_add(instance_list, obj)
     }
     instance_deactivate_all(true)
-    instance_activate_object(obj_practicemod)
+	instance_activate_object(obj_practicemod)
     instance_activate_object(obj_inputAssigner)
     instance_activate_object(obj_savesystem)
     instance_activate_object(obj_pause)
@@ -131,11 +133,11 @@ function pause_spawn_priests() //gml_Script_pause_spawn_priests
         image_speed: 0.35,
         image_xscale: choose(-1, 1),
         image_alpha: 0,
-        sprite_index: choose(3492, 1533, 2957)
+        sprite_index: choose(3712, 1621, 3133)
     }
 
     if is_holiday((1 << 0))
-        p.sprite_index = choose(1195, 1955, 1489)
+        p.sprite_index = choose(spr_pepbat_move, spr_ghostshroom, spr_ghoul_idle)
     var q = irandom(100)
     if (q >= 50)
         p.x = irandom_range((obj_screensizer.actual_width * 0.78), (obj_screensizer.actual_width * 0.65))
@@ -162,7 +164,7 @@ function pause_unpause_music() //gml_Script_pause_unpause_music
 
 function pause_update_priests() //gml_Script_pause_update_priests
 {
-    for (i = 0; i < ds_list_size(priest_list); i++)
+    for (var i = 0; i < ds_list_size(priest_list); i++)
     {
         var b = ds_list_find_value(priest_list, i)
         var destroy = 0
@@ -193,9 +195,9 @@ function pause_update_priests() //gml_Script_pause_update_priests
 
 function pause_draw_priests() //gml_Script_pause_draw_priests
 {
-    for (i = 0; i < ds_list_size(priest_list); i++)
+    for (var i = 0; i < ds_list_size(priest_list); i++)
     {
-        b = ds_list_find_value(priest_list, i)
+        var b = ds_list_find_value(priest_list, i)
         with (b)
             draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, 1, 0, c_white, image_alpha)
     }
