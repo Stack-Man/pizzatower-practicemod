@@ -31,37 +31,46 @@ if (show_stats)
 
 if (mach4)
 {
-	obj_player.movespeed = (20 * obj_player.image_xscale)
+	if (instance_exists(obj_player))
+		obj_player.movespeed = (20 * obj_player.image_xscale)
 }
 
 if (spawn_gerome)
 {
 	global.gerome = 1
-	instance_create(obj_player.x, obj_player.y, obj_geromefollow)
+
+	if (instance_exists(obj_player))
+		instance_create(obj_player.x, obj_player.y, obj_geromefollow)
 }
 
 if (spawn_key)
 {
 	global.keyget = 1
 	global.key_inv = 1
-	instance_create(obj_player.x, obj_player.y, obj_keyfollow)
+
+	if (instance_exists(obj_player))
+		instance_create(obj_player.x, obj_player.y, obj_keyfollow)
 }
 
 if (spawn_shotgun)
 {
-	instance_create(obj_player.x, obj_player.y, obj_shotgun)
+	if (instance_exists(obj_player))
+		instance_create(obj_player.x, obj_player.y, obj_shotgun)
 }
 
 if keyboard_check_pressed(vk_pageup)
-    instance_create(obj_player.x, obj_player.y, obj_characterswitch)
+{
+	if (instance_exists(obj_player))
+		instance_create(obj_player.x, obj_player.y, obj_characterswitch)
+}
+    
 
 if (spawn_satan)
 {
-	instance_create(obj_player.x, obj_player.y, obj_noisejetpack)
+	if (instance_exists(obj_player))
+		instance_create(obj_player.x, obj_player.y, obj_noisejetpack)
 }
 
-//Fix for not having tas tools currently
-//global.paused = 0
 
 if (!global.paused && room != Endingroom && room != Creditsroom && room != Johnresurrectionroom && room != rank_room && (!instance_exists(obj_endlevelfade)) && room != hub_loadingscreen && room != Finalintro)
 {

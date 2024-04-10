@@ -38,15 +38,6 @@ with (obj_achievementtracker)
             if (name != "sranks1" && name != "sranks2" && name != "sranks3" && name != "sranks4" && name != "sranks5" && name != "pranks1" && name != "pranks2" && name != "pranks3" && name != "pranks4" && name != "pranks5")
             {
                 unlocked = 0
-                size = ds_map_size(variables)
-                key = ds_map_find_first(variables)
-                for (j = 0; j < size; j++)
-                {
-                    q = ds_map_find_value(variables, key)
-                    if q.save
-                        q.value = ini_read_real("achievements_variables", key, q.init_value)
-                    key = ds_map_find_next(variables, key)
-                }
             }
         }
     }
@@ -58,15 +49,6 @@ with (obj_achievementtracker)
             if (name != "sranks1" && name != "sranks2" && name != "sranks3" && name != "sranks4" && name != "sranks5" && name != "pranks1" && name != "pranks2" && name != "pranks3" && name != "pranks4" && name != "pranks5")
             {
                 unlocked = 0
-                size = ds_map_size(variables)
-                key = ds_map_find_first(variables)
-                for (j = 0; j < size; j++)
-                {
-                    q = ds_map_find_value(variables, key)
-                    if q.save
-                        q.value = ini_read_real("achievements_variables", key, q.init_value)
-                    key = ds_map_find_next(variables, key)
-                }
             }
         }
     }

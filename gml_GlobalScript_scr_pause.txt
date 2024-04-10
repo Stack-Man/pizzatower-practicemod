@@ -112,7 +112,7 @@ function scr_pause_deactivate_objects(argument0) //gml_Script_scr_pause_deactiva
             ds_list_add(instance_list, obj)
     }
     instance_deactivate_all(true)
-	instance_activate_object(obj_practicemod)
+	instance_activate_object(obj_practice_mod)
     instance_activate_object(obj_inputAssigner)
     instance_activate_object(obj_savesystem)
     instance_activate_object(obj_pause)

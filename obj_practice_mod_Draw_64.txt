@@ -45,7 +45,7 @@ if variable_global_exists("smallfont")
 		draw_set_valign(fa_top)
 
 		//Draw Version
-		var versionstr = "SPM V3.0 "
+		var versionstr = "SPM V3.1.1.063 "
 		draw_text(8, 8, versionstr)
 
 		//Draw Stats
@@ -120,8 +120,8 @@ if variable_global_exists("smallfont")
 		
 			//Roomname and current sprite
 			draw_set_font(global.creditsfont)
-			var roomname = concat(room_get_name(room), " ", obj_player.targetDoor, " ", sprite_get_name(obj_player.sprite_index))
-			draw_text(140, 0, roomname)
+			var roomname = concat(room_get_name(room), " ", obj_player.targetDoor)
+			draw_text(180, 0, roomname)
 		}
 	}
 	//Version Text while paused
@@ -129,7 +129,7 @@ if variable_global_exists("smallfont")
     {
         draw_set_halign(fa_left)
         draw_set_valign(fa_top)
-        var cred = "SPM V3.0 BY STACK MAN & SUNGLASSES & JOLLY"
+        var cred = "SPM V3.1.1.063  BY STACK MAN & SUNGLASSES & JOLLY"
         draw_text(8, 8, cred)
     }
 	draw_set_valign(fa_bottom)
