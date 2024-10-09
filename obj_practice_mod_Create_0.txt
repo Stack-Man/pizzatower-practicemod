@@ -15,6 +15,10 @@ depth = -600
 room_time_paused = ""
 room_time_atbonk = ""
 
+//init vars that help accel calculation
+speed_x_prev_tick = 0
+speed_y_prev_tick = 0
+
 //sets local input variables for practice mod
 scr_init_input_practice()
 
