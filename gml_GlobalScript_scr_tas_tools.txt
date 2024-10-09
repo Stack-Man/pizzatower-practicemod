@@ -256,6 +256,39 @@ function tas_savestate(slottosave) //gml_Script_tas_savestate
         }
     }
 	
+	// chef task variables
+	// they are separate because they are full of arrays and objects passed by reference so in the other save state loops they are just resored to themselves
+	// so this "manually" goes inside the task data objects and saves their values to be restored later
+	var saved_chef_task_vars = []
+	for (i = 0; i < array_length(obj_achievementtracker.achievements_notify); i++)
+	{
+		// achievements_notify contains all the chef task data
+		var task_data = obj_achievementtracker.achievements_notify[i]
+		// see function "achievement_add_variable" to see other variables in chef task variable data
+		// value is enough for save state so only that is saved
+		var task_vars_for_state = 
+		{
+			value: 0
+		}
+
+		// the the variables and save them
+		var chef_task_vars_names = ds_map_keys_to_array(task_data.variables)
+		for (j = 0; j < array_length(chef_task_vars_names); j++)
+		{
+			var variable_to_save = ds_map_find_value(task_data.variables, chef_task_vars_names[j])
+			task_vars_for_state.value = variable_to_save.value
+		}
+		// save the full chef task data
+		array_push(saved_chef_task_vars, 
+		{
+			name: task_data.name,
+			creation_code: task_data.creation_code,
+			func: task_data.func,
+			unlocked: task_data.unlocked,
+			variables: task_vars_for_state
+		})
+	}
+
 	//Save state as array
 	// index : value
 	// 0 : room name
@@ -268,6 +301,7 @@ function tas_savestate(slottosave) //gml_Script_tas_savestate
 	// 7 : culled objects (array)
 	// 8 : current room save state
 	// 9 : last room save state
+	// 10: chef task variables
 
 	//Remove chain of savestates from saved save states
 	var current = global.savestates[10]
@@ -289,7 +323,8 @@ function tas_savestate(slottosave) //gml_Script_tas_savestate
 	culled_list,
 	culled_objects,
 	current,
-	last
+	last,
+	saved_chef_task_vars
 	]
 	
     global.savestates[argument0] = saveinfo

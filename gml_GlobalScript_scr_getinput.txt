@@ -146,7 +146,7 @@ function scr_getinput() //gml_Script_scr_getinput
     tdp_input_update(_dvc)
     if (instance_exists(obj_debugcontroller) && obj_debugcontroller.active)
         return;
-    if (instance_exists(obj_consoledebug) && obj_consoledebug.state > states.normal)
+    if (instance_exists(obj_consoledebug) && obj_consoledebug.state > 0)
         return;
     if instance_exists(obj_softlockcrash)
         return;
@@ -224,9 +224,9 @@ function scr_getinput() //gml_Script_scr_getinput
         stickpressed_vertical = 0
     if (object_index == obj_player1)
     {
-        if (state == states.Sjumpprep || state == states.crouch || state == states.ratmountcrouch || state == states.machcancel)
+        if (state == (99 << 0) || state == (100 << 0) || state == (260 << 0) || state == (306 << 0))
         {
-            if (state == states.Sjumpprep)
+            if (state == (99 << 0))
             {
                 var in = tdp_input_get("player_upC")
                 var dz = global.gamepad_deadzone_superjump
@@ -259,7 +259,7 @@ function scr_getinput() //gml_Script_scr_getinput
                                 break
                         }
 
-                        if (other.state == states.Sjumpprep)
+                        if (other.state == (99 << 0))
                         {
                             if (axis_value <= (-0.8 + dz) && (axis_value != 0 || inverted_axis != 0))
                                 other.key_up = 1
