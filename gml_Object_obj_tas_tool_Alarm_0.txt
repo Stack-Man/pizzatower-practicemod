@@ -241,28 +241,6 @@ if instance_exists(obj_spaceblockswitch)
 //Set camera position
 camera_set_view_pos(view_camera[0], save[3], save[4])
 
-// load chef task data
-// note that this is assuming the order and length of achievements_notify is the exact same of save[10] (which should be the case)
-for (i = 0; i < array_length(obj_achievementtracker.achievements_notify); i++)
-{
-	var chef_task_data_to_load = save[10][i]
-	var real_chef_task_data = obj_achievementtracker.achievements_notify[i]
-	// restore general data
-	real_chef_task_data.name = chef_task_data_to_load.name
-	real_chef_task_data.creation_code = chef_task_data_to_load.creation_code
-	real_chef_task_data.func = chef_task_data_to_load.func
-	real_chef_task_data.unlocked = chef_task_data_to_load.unlocked
-	// restore value of variables
-	var chef_task_vars_names = ds_map_keys_to_array(real_chef_task_data.variables)
-	for (j = 0; j < array_length(chef_task_vars_names); j++)
-	{
-		var variable_to_write_to = ds_map_find_value(real_chef_task_data.variables, chef_task_vars_names[j])
-		var variable_to_load = chef_task_data_to_load.variables
-		if ((variable_to_write_to != undefined))
-			variable_to_write_to.value = variable_to_load.value
-	}
-}
-
 create_transformation_tip(("Loaded slot " + string(slot)))
 
 global.loadingstate = 0
